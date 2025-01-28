@@ -1,0 +1,56 @@
+/* Tailwind CSS directives */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+body {
+  background: #0d1631;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.cricket-scorecard {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.team {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+}
+
+.batsmen, .bowler, .recent-overs, .match-status {
+  margin: 15px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.batsman {
+  display: flex;
+  gap: 10px;
+  margin: 5px 0;
+}
+
+.ball {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  margin: 0 2px;
+  border-radius: 50%;
+}
+
+.ball.wicket { background-color: #ff4444; color: white; }
+.ball.four { background-color: #4CAF50; color: white; }
+.ball.six { background-color: #2196F3; color: white; }
+.ball.wide, .ball.noball { background-color: #FFC107; }
