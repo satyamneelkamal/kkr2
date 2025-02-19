@@ -723,7 +723,7 @@ const LiveCricketScorecard = () => {
   useEffect(() => {
     const fetchMatchInfo = async () => {
       try {
-        const response = await fetch('https://192.168.1.11:5000/get-match-info');
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/get-match-info`);
         const data = await response.json();
         setMatchInfo(data);
       } catch (error) {
@@ -757,7 +757,7 @@ const LiveCricketScorecard = () => {
   const [wsConnected, setWsConnected] = useState(false);
 
   useEffect(() => {
-    const ws = new WebSocket('wss://192.168.1.11:5000');
+    const ws = new WebSocket(process.env.REACT_APP_WS_URL);
     
     ws.onopen = () => {
       console.log('🌐 WebSocket connected from LiveCricketScorecard');

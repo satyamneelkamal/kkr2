@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const resultButtonStyles = {
   win: 'bg-green-500',
   loss: 'bg-red-500',
   draw: 'bg-orange-400'
+};
+
+// Update this to use the API URL from environment
+const API_URL = process.env.REACT_APP_API_URL;
+
+const getTeamImageUrl = (teamName) => {
+  return `${API_URL}/teams/${teamName.toLowerCase().replace(/\s+/g, '')}`;
 };
 
 const MatchBasicInfo = ({ type, data }) => {
@@ -737,35 +744,107 @@ const MatchBasicInfo = ({ type, data }) => {
         if (!data || !data.teams) return null;
         return (
           <div className="space-y-0">
-            <div className="bg-gradient-to-br from-[#1a2442] via-[#1e2845] to-[#141c36] rounded-xl pb-4 backdrop-blur-sm bg-opacity-95">
-              <div className="px-8 pt-4 space-y-8">
-                {Object.entries(data.teams).map(([teamName, teamData]) => (
-                  <div key={teamName}>
-                    <h2 className="text-[2.6rem] font-bold tracking-wide text-center text-[#e5e5e5] pb-[10px] p-[20px]">
-                      {teamName} PLAYING XI
-                    </h2>
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-3 pb-[42px]">
-                      {teamData.playingXI.map((player, idx) => (
-                        <div key={idx} className="flex items-center justify-between px-6 py-4 rounded-lg
-                                              border border-blue-400/20 shadow-md shadow-[#090d1f]
-                                              bg-gradient-to-br from-[#0f1631] via-[#162448] to-[#0c1229]">
-                          <div className="flex items-center gap-3">
-                            <span className="text-[2rem] font-medium text-[#e5e5e5]">
-                              {player.name}
-                              {player.isCaptain && (
-                                <span className="text-[1.6rem] text-yellow-400 ml-2">(C)</span>
-                              )}
-                              {player.isWicketkeeper && (
-                                <span className="text-[1.6rem] text-blue-400 ml-2">(WK)</span>
-                              )}
-                            </span>
-                          </div>
-                          <div className="text-[1.6rem] text-gray-400">{player.role}</div>
-                        </div>
+            <div className="bg-gradient-to-br from-[#1a2442]/90 via-[#1e2845]/95 to-[#141c36]/90 
+                          rounded-xl relative overflow-hidden
+                          border border-blue-500/10">
+              {/* Enhanced 3D Pattern Background */}
+              <div className="absolute inset-0 opacity-20">
+                <div className="absolute inset-0 
+                             bg-[linear-gradient(45deg,#4169e1_25%,transparent_25%,transparent_75%,#4169e1_75%,#4169e1),
+                                linear-gradient(45deg,#4169e1_25%,transparent_25%,transparent_75%,#4169e1_75%,#4169e1)] 
+                             bg-[length:60px_60px] bg-[position:0_0,30px_30px]
+                             transform rotate-[30deg] scale-150
+                             animate-slowMove"></div>
+              </div>
+
+              {/* Enhanced Ambient Light Effect */}
+              <div className="absolute inset-0">
+                <div className="absolute inset-0 
+                             bg-[radial-gradient(circle_at_50%_-20%,rgba(65,105,225,0.15),transparent_70%)]">
+                </div>
+                <div className="absolute inset-0 
+                             bg-[radial-gradient(circle_at_80%_80%,rgba(65,105,225,0.1),transparent_50%)]">
+                </div>
+              </div>
+
+              {/* Enhanced Edge Lighting */}
+              <div className="absolute inset-0">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-transparent to-blue-500/10"></div>
+                <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 via-transparent to-blue-500/10"></div>
+              </div>
+
+              {/* Content Container with Premium Shadow */}
+              <div className="p-5 relative backdrop-blur-[2px]">
+                {Object.entries(data.teams).map(([teamName, teamData], index) => (
+                  <div key={teamName} className="relative">
+                    {/* Enhanced Section Divider */}
+                    {index > 0 && (
+                      <div className="absolute -inset-x-4 top-0">
+                        <div className="h-px bg-gradient-to-r from-transparent via-blue-400/30 to-transparent"></div>
+                        <div className="h-px mt-[1px] bg-gradient-to-r from-transparent via-blue-400/10 to-transparent"></div>
+                      </div>
+                    )}
+                    
+                    <div className="grid grid-cols-3 gap-4">
+                      {teamData.playingXI.slice(0, 11).map((player, idx) => (
+                        <PlayerCard key={idx} player={player} />
                       ))}
+                      
+                      {/* Team name box - matching player card height and style */}
+                      <div className="flex items-center justify-center gap-6 px-8 py-4 rounded-xl h-[155px]
+                                  border border-blue-400/20 shadow-md shadow-[#090d1f]
+                                  bg-gradient-to-br from-[#0f1631] via-[#162448] to-[#0c1229]
+                                  relative overflow-hidden">
+                        {/* Animated gradient overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-400/5 to-blue-500/0"></div>
+                        
+                        {/* Team Flag Container */}
+                        <div className="relative">
+                          <div className="relative w-[90px] h-[90px] overflow-hidden
+                                        rounded-full
+                                        border-2 border-[#4169e1]
+                                        shadow-[0_8px_32px_rgba(59,130,246,0.5)]
+                                        before:absolute before:inset-0 before:z-10 
+                                        before:bg-gradient-to-t before:from-black/20 before:to-transparent
+                                        after:absolute after:inset-0 after:z-20 
+                                        after:bg-gradient-to-b after:from-white/10 after:via-transparent after:to-black/30">
+                            <img 
+                              src={getTeamImageUrl(teamName)}
+                              alt={teamName}
+                              className="w-full h-full object-cover relative z-30"
+                              style={{ 
+                                imageRendering: 'high-quality',
+                                objectFit: 'cover',
+                                filter: 'contrast(1.1) saturate(1.1) brightness(1.05)',
+                                transform: 'perspective(1000px) rotateY(0deg) scale(1.02)',
+                              }}
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* Team Name with Premium Styling */}
+                        <div className="flex items-center">
+                          <span className="text-[5rem] font-bold relative z-10 leading-none
+                                         tracking-wider
+                                         bg-gradient-to-b from-[#e5e5e5] via-[#e5e5e5] to-[#a3a3a3]
+                                         text-transparent bg-clip-text
+                                         drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)]">
+                            {`${teamName} XI`}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
+              </div>
+
+              {/* Enhanced Bottom Edge */}
+              <div className="absolute bottom-0 left-0 right-0">
+                <div className="h-px bg-gradient-to-r from-transparent via-blue-400/30 to-transparent"></div>
+                <div className="h-px mt-[1px] bg-gradient-to-r from-transparent via-blue-400/10 to-transparent"></div>
               </div>
             </div>
           </div>
@@ -890,8 +969,159 @@ const MatchBasicInfo = ({ type, data }) => {
             opacity: 0.6;
           }
         }
+
+        @keyframes slowMove {
+          0% {
+            background-position: 0 0, 30px 30px;
+          }
+          100% {
+            background-position: 60px 60px, 90px 90px;
+          }
+        }
+
+        .animate-slowMove {
+          animation: slowMove 30s linear infinite;
+        }
+
+        .premium-pattern {
+          background-image: 
+            linear-gradient(45deg, #4169e1 25%, transparent 25%, transparent 75%, #4169e1),
+            linear-gradient(45deg, #4169e1 25%, transparent 25%, transparent 75%, #4169e1);
+          background-size: 60px 60px;
+          background-position: 0 0, 30px 30px;
+        }
       `}</style>
     </>
+  );
+};
+
+const PlayerIcon = () => (
+  <svg viewBox="0 0 24 24" className="w-full h-full text-blue-400/80">
+    <path 
+      fill="currentColor" 
+      d="M12 4a4 4 0 014 4 4 4 0 01-4 4 4 4 0 01-4-4 4 4 0 014-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4z"
+    />
+  </svg>
+);
+
+const PlayerCard = ({ player }) => {
+  const [imageError, setImageError] = useState(false);
+
+  const getPlayerImageName = (shortName) => {
+    return shortName.toLowerCase()
+                   .replace(/\s+/g, '')
+                   .replace(/\./g, '');
+  };
+
+  const playerImageUrl = `${API_URL}/players/${getPlayerImageName(player.shortName)}`;
+  
+  return (
+    <div className="flex items-center gap-4 px-8 py-4 rounded-xl
+                    border border-blue-400/20 shadow-md shadow-[#090d1f]
+                    bg-gradient-to-br from-[#0f1631] via-[#162448] to-[#0c1229]
+                    transition-all duration-300 h-[155px]
+                    relative overflow-hidden">
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(65,105,225,0.1)_0%,transparent_100%)]
+                    animate-[pulse_4s_ease-in-out_infinite]"></div>
+      
+      {/* Subtle moving light effect */}
+      <div className="absolute inset-0">
+        <div className="absolute w-[200%] h-full 
+                      bg-[linear-gradient(90deg,transparent_0%,rgba(65,105,225,0.05)_50%,transparent_100%)]
+                      animate-[lightMove_8s_linear_infinite]"></div>
+      </div>
+
+      {/* Player Image with premium effects */}
+      <div className="relative">
+        {/* Premium backdrop glow */}
+        <div className="absolute -inset-[2px] z-0 
+                      bg-gradient-to-r from-blue-500/20 via-blue-400/10 to-blue-500/20
+                      blur-md rounded-full
+                      animate-[glowPulse_4s_ease-in-out_infinite]"></div>
+        
+        <div className="relative w-[114px] h-[114px] overflow-hidden
+                      rounded-full
+                      border-2 border-[#4169e1]
+                      shadow-[0_0_15px_rgba(59,130,246,0.5)]
+                      before:absolute before:inset-0 before:z-10 
+                      before:bg-gradient-to-t before:from-black/20 before:to-transparent
+                      after:absolute after:inset-0 after:z-20 
+                      after:bg-gradient-to-b after:from-white/10 after:via-transparent after:to-black/30">
+          
+          {/* Ambient light effect with animation */}
+          <div className="absolute inset-0 z-15
+                        bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.15),transparent_70%)]
+                        animate-[ambientLight_6s_ease-in-out_infinite]"></div>
+
+          {/* Edge highlight with animation */}
+          <div className="absolute inset-0 z-20 
+                        bg-gradient-to-r from-white/5 via-transparent to-white/5
+                        animate-[edgeLight_8s_linear_infinite]"></div>
+
+          {/* Premium overlay with pulse */}
+          <div className="absolute inset-0 z-25
+                        bg-gradient-to-b from-blue-400/10 via-transparent to-blue-900/20
+                        opacity-60
+                        animate-[overlayPulse_4s_ease-in-out_infinite]"></div>
+
+          {imageError ? (
+            <PlayerIcon />
+          ) : (
+            <img 
+              src={playerImageUrl}
+              alt={player.name}
+              className="w-full h-full object-cover relative z-30"
+              style={{ 
+                imageRendering: 'high-quality',
+                objectFit: 'cover',
+                objectPosition: 'center top',
+                filter: 'contrast(1.1) saturate(1.1) brightness(1.05)',
+                transform: 'perspective(1000px) rotateY(0deg) scale(1.02)',
+              }}
+              onError={() => setImageError(true)}
+            />
+          )}
+
+          {/* Continuous shine effect */}
+          <div className="absolute inset-0 z-30 
+                        bg-gradient-to-tr from-transparent via-white/10 to-transparent 
+                        animate-[continuousShine_4s_linear_infinite]"></div>
+        </div>
+      </div>
+      
+      {/* Player Info - Right side */}
+      <div className="flex flex-col justify-center min-w-0 flex-grow translate-x-[23px]">
+        {/* Name and Badges Row */}
+        <div className="flex items-center space-x-2 mb-2">
+          <span className="text-[2.2rem] font-medium text-[#e5e5e5] min-w-0 truncate
+                        animate-[textGlow_4s_ease-in-out_infinite]">
+            {player.name}
+          </span>
+          <div className="flex-shrink-0 flex gap-1">
+            {player.isCaptain && (
+              <span className="text-[1.8rem] text-yellow-400 font-bold
+                           animate-[captainBadge_4s_ease-in-out_infinite]">(C)</span>
+            )}
+            {player.isWicketkeeper && (
+              <span className="text-[1.8rem] text-blue-400 font-bold
+                           animate-[wkBadge_4s_ease-in-out_infinite]">(WK)</span>
+            )}
+          </div>
+        </div>
+        
+        {/* Role Badge with Animation */}
+        <div className="text-[1.8rem] text-gray-400
+                      px-4 py-1 rounded-full bg-[#0a0f24]/50
+                      border border-blue-400/10 inline-block
+                      w-fit
+                      relative overflow-hidden">
+          <div className="relative z-10">{player.role}</div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/5 to-transparent
+                       animate-[roleBadgeGlow_4s_linear_infinite]"></div>
+        </div>
+      </div>
+    </div>
   );
 };
 

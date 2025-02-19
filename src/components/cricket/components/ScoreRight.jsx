@@ -17,12 +17,14 @@ const ScoreRight = () => {
         const API_URL = process.env.REACT_APP_API_URL || 'https://localhost:5000';
         const response = await fetch(`${API_URL}/get-right-team`, {
           signal: controller.signal,
+          method: 'GET',
           headers: {
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Origin': window.location.origin
           },
-          ...(process.env.NODE_ENV === 'development' && {
-            rejectUnauthorized: false
-          })
+          mode: 'cors',
+          credentials: 'include'
         });
 
         clearTimeout(timeoutId);
